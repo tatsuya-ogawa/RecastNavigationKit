@@ -1,0 +1,15 @@
+{
+  "originHash" : "f13c2fb7d614cf4d18fef450562d8018068cb06f1e49904930686ce2e49d11b8",
+  "pins" : [
+    {
+      "identity" : "recastnavigationkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tatsuya-ogawa/RecastNavigationKit",
+      "state" : {
+        "branch" : "main",
+        "revision" : "4201a94331802ad41dbe357160879f8ca512c9c7"
+      }
+    }
+  ],
+  "version" : 3
+}

@@ -1,0 +1,9 @@
+framework-build/ios-cmake
+framework-build/recastnavigation
+framework-build/build-ios/
+framework-build/build-ios-device/
+framework-build/build-ios-sim/
+framework-build/xcframeworks/
+framework-build/dist/
+.build
+.swiftpm

@@ -1,0 +1,54 @@
+name: Build xcframeworks
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'framework-build/recastnavigation/**'
+      - 'framework-build/**'
+      - '.github/workflows/build-xcframeworks.yml'
+  pull_request:
+    paths:
+      - 'framework-build/recastnavigation/**'
+      - 'framework-build/**'
+      - '.github/workflows/build-xcframeworks.yml'
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Ensure CMake
+        run: |
+          if ! command -v cmake >/dev/null 2>&1; then
+            brew install cmake
+          fi
+
+      - name: Fetch build dependencies
+        run: |
+          if [ ! -d framework-build/ios-cmake ]; then
+            git clone --depth 1 https://github.com/leetal/ios-cmake.git framework-build/ios-cmake
+          fi
+          if [ ! -d framework-build/recastnavigation ]; then
+            git clone --depth 1 https://github.com/recastnavigation/recastnavigation.git framework-build/recastnavigation
+          fi
+
+      - name: Build xcframeworks
+        run: |
+          chmod +x framework-build/make-xcframeworks.sh
+          ./framework-build/make-xcframeworks.sh
+
+      - name: Sync into Swift package
+        run: |
+          mkdir -p RecastNavigationKit/Frameworks
+          rsync -a framework-build/xcframeworks/*.xcframework RecastNavigationKit/Frameworks/
+
+      - name: Upload xcframeworks artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcframeworks
+          path: |
+            framework-build/xcframeworks/*.xcframework
+            RecastNavigationKit/Frameworks/*.xcframework
